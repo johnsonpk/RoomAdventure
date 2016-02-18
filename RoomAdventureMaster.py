@@ -132,7 +132,8 @@ class Room(object):
 		#items in room
 		s += "You see: "
 		for item in self.items:
-			s += item + " "
+			s += item + ", "
+		s = s[0:len(s)-2]
 		s += "\n"
 		
 		#exits from room
@@ -197,7 +198,7 @@ def createRooms():
 	# Courtyard Room Information
 	courtyard.addExit("north", great_hall)
 	courtyard.addItem("Fountain", "The lady of the mist welcomes you.")
-	courtyard.addItem("FrontDoor", "It is a wooden door entrance to the Great Hall.")
+	courtyard.addItem("Front Door", "It is a wooden door entrance to the Great Hall.")
 	courtyard.addItem("Hedges", "They are overgrown.")
 	
 	# Great Hall Room Information
@@ -312,11 +313,48 @@ while (True):
 	# split the user input into words (words are separated by spaces)
 	# and store the words in a list
 	words = action.split()
+	
+	# If more than two words are entered,
+	# consider the first word the verb and remaining words part of the noun
+	if (len(words) >= 3):
+		wordsTemp = []
+		
+		# Have to build wordsTemp manually, otherwise .pop(0) will affect words also
+		for i in words:
+			wordsTemp.append(i)
+		
+		# remove verb from wordsTemp
+		wordsTemp.pop(0)
+		
+		# Build single string from elements in wordsTemp
+		temp = ""
+		for i in wordsTemp:
+			temp += i + " "
+		
+		
+		# set second element of words to our single string of nouns
+		words[1] = temp
+		
+		# remove space from end of string
+		del words[2:len(words)]
+		print words
+		words[1] = words[1][0:len(words[1])-1]
+	print words
 	# the game only understands two word inputs
 	if (len(words) == 2):
 		# isolate the verb and noun
 		verb = words[0]
 		noun = words[1]
+		
+		# the verb is: doot
+		if (verb == "doot"):
+			response = "Mr. Skeltal won't give you any calcium if you keep this up..."
+			if (noun == "doot"):
+				response = " Thank Mr. Skeltal" + "\n" + "     _.--^^--._        " + "\n" + "   .^          ^.     " + "\n" + "  | .   `      ` |    " + "\n" + "  \(            )/   " + "\n" + "   \)__.    _._(/  " + "\n" + "   //   >..<   \\  " + "\n" + "   |__.` vv `.__/ " + "\n" + "      l```^``l    " + "\n" + "      \_    _/  " + "\n" + " _      )--(     _  " + "\n" + "| `--.__)--(_.--` |  " + "\n" + " \ |`----``----`| / " + "\n" + "  ||  `-`  `--` || " + "\n" + "  || `--`  `--` || " + "\n" + "  |l `--`--`--` |l  " + "\n" + " |__|`--`  `--`|__| " + "\n" + " |  |    )-(   |  | " + "\n" + "  ||     )-(    \|| " + "\n" + "  || __  )_(  __ \\  " + "\n" + "  ||`  `-   -`  \ \\ " + "\n" + "  ||\_   `-`   _/ |_\ " + "\n" + " /_\ _)J-._.-L(   /`-\ " + "\n" + "|`- I_)O /\ O( `--l\\\| " + "\n" + "||||( `-`  `-`) .-` ||| " + "\n" + " \\\ \       / /   /// " + "\n" + "    \ \     / / " + "\n" + "     \ \   / / " + "\n" + "     /  \ /  \ " + "\n" + "     |_()I()._| " + "\n" + "     \   /\   / " + "\n" + "      | /  \ | " + "\n" + "      | |   \ \ " + "\n" + "      | |    \ \ " + "\n" + "      | |     \ \ " + "\n" + "      | |doot  \ \_ " + "\n" + "      | |      /-._\ " + "\n" + "     |.-.\    //.-._) " + "\n" + "      \\\\   /// " + "\n" + "       \\\\-``` "
+				
+				
+				
+		
 		
 		# the verb is: go
 		if (verb == "go"):

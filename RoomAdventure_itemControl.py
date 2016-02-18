@@ -253,6 +253,10 @@ while (True):
 	# split the user input into words (words are separated by spaces)
 	# and store the words in a list
 	words = action.split()
+	if (len(words) == 3):
+		temp = words[1] + " " + words[2]
+		words[1] = temp
+		print words[1]
 	# the game only understands two word inputs
 	if (len(words) == 2):
 		# isolate the verb and noun
