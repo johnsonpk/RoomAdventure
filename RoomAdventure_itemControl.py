@@ -4,8 +4,6 @@
 # Description:Room adventure text based game
 ######################################################################
 ######################################################################
-#import the time library
-import time
 #blueprint for a room
 #the room class
 class Room(object):
@@ -73,7 +71,7 @@ class Room(object):
 	@grabbables.setter
 	def grabbables(self, value):
 		self._grabbables = value
-
+		
 	@property
 	def grabbablesDescriptions(self):
 		return self._grabbablesDescriptions
@@ -104,10 +102,11 @@ class Room(object):
 			desc = desc + " There is a {}".format(grab) + " on the {}".format(name)
 		self.itemDescriptions.append(desc)
 		
-	#adds a grabbable to the room, appends to list
-	def addGrabbable(self, item, description = ""):
+	# adds a grabbable to the room, appends to list
+	def addGrabbable(self, item, description):
 		self._grabbables.append(item)
 		self.grabbablesDescriptions.append(description)
+		
 		
 	# Deletes grabbable, removes grabbable description, fixes item description
 	def delGrabbable(self, item):
@@ -123,6 +122,10 @@ class Room(object):
 				i = self._itemDescriptions.index(a1)
 				self._itemDescriptions[i] = self._itemOriginalDescriptions[i]
 				break
+		
+		
+		
+		
 	
 	#prints a string description of the room	
 	def __str__(self):
@@ -141,11 +144,6 @@ class Room(object):
 			s += exit + " "
 		return s
 	
-#no longer in class
-#**************************************
-#**************************************
-#**************************************
-#**************************************
 
 
 # displays an appropriate "message" when the player dies
@@ -179,119 +177,62 @@ def death():
 	print " " * 5 + "$" * 3 + "\"" + " " * 25 + "$" * 4 + "\""
 
 
-
 #creates the rooms
 def createRooms():
 	global currentRoom
+	r1 = Room("Room 1")
+	r2 = Room("Room 2")
+	r3 = Room("Room 3")
+	r4 = Room("Room 4")
 	
-	courtyard = Room("Courtyard")
-	great_hall = Room("Great Hall")
-	west_wing_parlor = Room("West Wing Parlor")
-	study = Room("Study")
-	laboratory = Room("Laboratory")
-	east_wing_parlor = Room("East Wing Parlor")
-	dining_hall = Room("Dining Hall")
-	kitchen = Room("Kitchen")
-	upstairs_BallRoom = Room("BallRoom")
+	r1.addExit("east", r2)
+	r1.addExit("south", r3)
+	# add grabbables to room 1
+	r1.addGrabbable("key", "A golden key.")
+	r1.addGrabbable("glasses","An old pair of glasses.")
+	# add items to room 1
+
 	
-	# Courtyard Room Information
-	courtyard.addExit("north", great_hall)
-	courtyard.addItem("Fountain", "The lady of the mist welcomes you.")
-	courtyard.addItem("FrontDoor", "It is a wooden door entrance to the Great Hall.")
-	courtyard.addItem("Hedges", "They are overgrown.")
-	
-	# Great Hall Room Information
-	great_hall.addExit("west", west_wing_parlor)
-	great_hall.addExit("east", east_wing_parlor)
-	great_hall.addExit("up", upstairs_BallRoom)
-	great_hall.addItem("Statue", "WATTTT")
-	great_hall.addItem("StairCase", "You can go down to the basement but you need all the keys. You can also go upstairs.")
-	great_hall.addItem("Chandelier", "WATTTT")
-	
-	#great_hall.addExit("south", courtyard) 	# DOOR SHUTS BEHIND YOU AS YOU ENTER
+	r1.addItem("table", "It is made of oak.", "key")
+	r1.addItem("chair", "It is made of wicker and no one is sitting on it.", "glasses")
 	
 	
-	upstairs_BallRoom.addExit("down", great_hall)
-	upstairs_BallRoom.addItem("DanceFloor", "The Dancefloor is empty. You can tell many nobles have danced on this floor.")
-	upstairs_BallRoom.addItem("DiscoBall", "You can see the dust that has built up on it. This thing hasn't been used since the '80s")
-	upstairs_BallRoom.addItem("DjBooth", "You see DJ Khaled's logo on the booth. The booth is covered in piles of \"jewelry\" and other valueables.\n One of these valuables is a golden key.")
+	r2.addExit("south", r4)
+	r2.addExit("west", r1)
+	#r2.addItem("rug", "Persian")
+	#r2.addItem("fireplace", "Has Ashes")
 	
-	# TO DO --> ADD UPSTAIRS AND DOWNSTAIRS TREASURE CHESTS
+	r3.addExit("north", r1)
+	r3.addExit("east", r4)
+	r3.addItem("bookshelves", "They are empty")
+	r3.addItem("desk", "An old, worn down desk.", "book")
+	r3.addGrabbable("book", "An introduction to Scratch, the only tool you'll ever need")
 	
-	# West Wing Parlor Room Information
-	# Exits
-	west_wing_parlor.addExit("north", study)
-	west_wing_parlor.addExit("east", great_hall)
-	# Items
-	west_wing_parlor.addItem("TV", "The movie the Rise of Kara is playing.")
-	west_wing_parlor.addItem("Speakers", "The music is taken from ourgourdandsavior.com.")
-	west_wing_parlor.addItem("Lazy Boy", "It is dusty from years of not being cleaned by the lazy maid.")
-	
-	# Study Room Information
-	# Exits
-	study.addExit("west", laboratory)
-	study.addExit("south", west_wing_parlor)
-	# Items 
-	study.addItem("BookShelf", "Hollow Books lie there, undisturbed for centuries")
-	study.addItem("Globe", "Made during WWII, it shows the glorious ages of the U.S., that is, without Alaska and Hawaii.")
-	study.addItem("Phonograph", "Moonlight Sonata is playing gracefully through the room.")
-	
-	
-	# Laboratory Room Information
-	laboratory.addExit("east", study)
-	laboratory.addItem("Telescope", "It is the same telescope that Gaileo used to disprove geocentrism")
-	laboratory.addItem("Chemical Cabinet", "It is unfortunately closed. No explosions...")
-	laboratory.addItem("Heavy Metal Operating Table", "An ear rests on the table.")
-	laboratory.addGrabbable("Red Key")
-	
-	# East Wing Parlor Room Information
-	east_wing_parlor.addExit("west", great_hall)
-	east_wing_parlor.addExit("north", dining_hall)
-	east_wing_parlor.addItem("Windows", "Darkness has enveloped the mansion.")
-	east_wing_parlor.addItem("Painting", "It is none other than the classic American Gothic.")
-	east_wing_parlor.addItem("Couch", "The couch's cushions have been violently cut up.")
-	
-	
-	# Dining Hall Room Information
-	dining_hall.addExit("east", kitchen)
-	dining_hall.addExit("south", east_wing_parlor)
-	dining_hall.addItem("Table", "It has something on it that WATTTT")
-	dining_hall.addItem("Chandelier", "It is the same one as the one in the Grand Hall")
-	
-	# Kitchen Room Information
-	kitchen.addExit("west", dining_hall)
-	kitchen.addItem("sink", "There are dirty dishes in it that appear to have been there for decades.")
-	kitchen.addItem("freezer", "There is a sign that says 'DO NOT OPEN.'")
-	kitchen.addItem("Stove", "There is a bowl of jalepeno cheese soup.")
-	kitchen.addGrabbable("Orange Key")
-	
-	
+	r4.addExit("north", r2)
+	r4.addExit("west", r3)
+	r4.addExit("south", None) #DEATH
+	#r4.addItem("rug", "It is made of wicker and no one is sitting on it.")
+	#r4.addItem("table", "It is made of oak.")
+	#r4.addGrabbable("knife")
 	
 	#start in room 1
-	currentRoom = courtyard
+	currentRoom = r1
 	
 #main part of program
 inventory = []
 inventoryDescriptions = []
 createRooms()
-#sets startTime = to the current time.
-startTime = time.time()
-
 #play forever
 while (True):
 	#set the status so the player has situational awareness
 	#the status has room and inventory information
-	status = "{}\nYou are carrying: {}".format(currentRoom, inventory)
-	#calculates the total time since the game started.
-	totalTime ="Total Time: {} seconds\n".format(round(time.time()-startTime, 3),)
+	status = "{}\nYou are carrying: {}\n".format(currentRoom, inventory)
 	if (currentRoom == None ):
 		death()
 		break
 	# display the status
 	print "========================================================="
 	print status
-	#display the time since the game started
-	print totalTime
 	# prompt for player input
 	# the game supports a simple language of <verb> <noun>
 	# valid verbs are go, look, and take
@@ -317,7 +258,7 @@ while (True):
 		# isolate the verb and noun
 		verb = words[0]
 		noun = words[1]
-		
+	
 		# the verb is: go
 		if (verb == "go"):
 			# set a default response
@@ -336,26 +277,26 @@ while (True):
 					break
 		# the verb is: look
 		elif (verb == "look"):
+			
 			# set a default response
 			response = "I don't see that item."
 			# check for valid items in the current room
 			for i in range(len(currentRoom.items)):
 				# a valid item is found
-
-				if (noun == currentRoom.items[i].lower()):
+				if (noun == currentRoom.items[i]):
 					# set the response to the item's description
 					response = currentRoom.itemDescriptions[i]
-
 					# no need to check any more items
 					break
 					# the verb is: take
-
 			for i in range(len(inventory)):
 				# a valid item is found
 				if (noun == inventory[i]):
 					# set the response to the item's description
 					response = inventoryDescriptions[i]
 					break
+				
+					
 					
 		elif (verb == "take"):
 			# set a default response
