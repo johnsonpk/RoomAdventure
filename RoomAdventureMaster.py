@@ -97,15 +97,18 @@ class Room(object):
 		self._exits.append(exit)
 		self._exitLocations.append(room)
 	
-	def addItem (self, name, desc, grab = ""):
+	def addItem (self, name, desc, grab = "", mod = 0):
 		self._items.append(name)
 		self._itemOriginalDescriptions.append(desc)
-		if (grab != ""):
+		if (grab != "") and (mod == 0):
 			desc = desc + " There is a {}".format(grab) + " on the {}".format(name)
+		elif (mod == 1):
+			desc = desc + " " + grab
 		self.itemDescriptions.append(desc)
 		
 	#adds a grabbable to the room, appends to list
 	def addGrabbable(self, item, description = ""):
+		item = item.lower()
 		self._grabbables.append(item)
 		self.grabbablesDescriptions.append(description)
 		
@@ -185,6 +188,7 @@ def death():
 def createRooms():
 	global currentRoom
 	
+	# Rooms
 	courtyard = Room("Courtyard")
 	great_hall = Room("Great Hall")
 	west_wing_parlor = Room("West Wing Parlor")
@@ -193,20 +197,26 @@ def createRooms():
 	east_wing_parlor = Room("East Wing Parlor")
 	dining_hall = Room("Dining Hall")
 	kitchen = Room("Kitchen")
-	upstairs_BallRoom = Room("BallRoom")
+	upstairs_BallRoom = Room("Ball Room")
 	
 	# Courtyard Room Information
+	# Exits
 	courtyard.addExit("north", great_hall)
+	# Items
 	courtyard.addItem("Fountain", "The lady of the mist welcomes you.")
 	courtyard.addItem("Front Door", "It is a wooden door entrance to the Great Hall.")
-	courtyard.addItem("Hedges", "They are overgrown.")
+	courtyard.addItem("Hedges", "They are overgrown.", "There is an test book beside it",1)
+	# Grabbables
+	courtyard.addGrabbable("Test book","An old test book")
 	
 	# Great Hall Room Information
+	# Exits
 	great_hall.addExit("west", west_wing_parlor)
 	great_hall.addExit("east", east_wing_parlor)
 	great_hall.addExit("up", upstairs_BallRoom)
+	# Items
 	great_hall.addItem("Statue", "WATTTT")
-	great_hall.addItem("StairCase", "You can go down to the basement but you need all the keys. You can also go upstairs.")
+	great_hall.addItem("Stair Case", "You can go down to the basement but you need all the keys. You can also go upstairs.")
 	great_hall.addItem("Chandelier", "WATTTT")
 	
 	#great_hall.addExit("south", courtyard) 	# DOOR SHUTS BEHIND YOU AS YOU ENTER
@@ -233,37 +243,50 @@ def createRooms():
 	study.addExit("west", laboratory)
 	study.addExit("south", west_wing_parlor)
 	# Items 
-	study.addItem("BookShelf", "Hollow Books lie there, undisturbed for centuries")
+	study.addItem("Book Shelf", "Hollow Books lie there, undisturbed for centuries")
 	study.addItem("Globe", "Made during WWII, it shows the glorious ages of the U.S., that is, without Alaska and Hawaii.")
 	study.addItem("Phonograph", "Moonlight Sonata is playing gracefully through the room.")
 	
 	
 	# Laboratory Room Information
+	# Exits
 	laboratory.addExit("east", study)
+	# Items
 	laboratory.addItem("Telescope", "It is the same telescope that Gaileo used to disprove geocentrism")
 	laboratory.addItem("Chemical Cabinet", "It is unfortunately closed. No explosions...")
-	laboratory.addItem("Heavy Metal Operating Table", "An ear rests on the table.")
-	laboratory.addGrabbable("Red Key")
+	laboratory.addItem("Heavy Metal Operating Table", "An ear rests on the table.", "ear")
+	laboratory.addItem("Lab Skeleton","Doot doot.","red key")
+	# Grabbables
+	laboratory.addGrabbable("Ear", "All the better to hEAR you with, my dear...")
+	laboratory.addGrabbable("Red Key","A blood-red key.")
+	
 	
 	# East Wing Parlor Room Information
+	# Exits
 	east_wing_parlor.addExit("west", great_hall)
 	east_wing_parlor.addExit("north", dining_hall)
+	# Items
 	east_wing_parlor.addItem("Windows", "Darkness has enveloped the mansion.")
 	east_wing_parlor.addItem("Painting", "It is none other than the classic American Gothic.")
 	east_wing_parlor.addItem("Couch", "The couch's cushions have been violently cut up.")
 	
 	
 	# Dining Hall Room Information
+	# Exits
 	dining_hall.addExit("east", kitchen)
 	dining_hall.addExit("south", east_wing_parlor)
+	# Items
 	dining_hall.addItem("Table", "It has something on it that WATTTT")
 	dining_hall.addItem("Chandelier", "It is the same one as the one in the Grand Hall")
 	
 	# Kitchen Room Information
+	# Items
 	kitchen.addExit("west", dining_hall)
-	kitchen.addItem("sink", "There are dirty dishes in it that appear to have been there for decades.")
-	kitchen.addItem("freezer", "There is a sign that says 'DO NOT OPEN.'")
+	#
+	kitchen.addItem("Sink", "There are dirty dishes in it that appear to have been there for decades.")
+	kitchen.addItem("Freezer", "There is a sign that says 'DO NOT OPEN.'")
 	kitchen.addItem("Stove", "There is a bowl of jalepeno cheese soup.")
+	kitchen.addItem("Stool", "An old stool.","orange key")
 	kitchen.addGrabbable("Orange Key")
 	
 	
@@ -284,7 +307,7 @@ while (True):
 	#the status has room and inventory information
 	status = "{}\nYou are carrying: {}".format(currentRoom, inventory)
 	#calculates the total time since the game started.
-	totalTime ="Total Time: {} seconds\n".format(round(time.time()-startTime, 3),)
+	totalTime ="Total Time: {} seconds\n".format(round(time.time()-startTime, 1),)
 	if (currentRoom == None ):
 		death()
 		break
@@ -293,6 +316,7 @@ while (True):
 	print status
 	#display the time since the game started
 	print totalTime
+	
 	# prompt for player input
 	# the game supports a simple language of <verb> <noun>
 	# valid verbs are go, look, and take
@@ -335,11 +359,11 @@ while (True):
 		# set second element of words to our single string of nouns
 		words[1] = temp
 		
-		# remove space from end of string
+		# Ensure there are only two elements in words
 		del words[2:len(words)]
-		print words
+		
+		# remove space from end of string
 		words[1] = words[1][0:len(words[1])-1]
-	print words
 	# the game only understands two word inputs
 	if (len(words) == 2):
 		# isolate the verb and noun
@@ -395,6 +419,7 @@ while (True):
 			
 			# check for valid grabbable items in the current room
 			for grabbable in currentRoom.grabbables:
+				
 				# a valid grabbable item is found
 				if (noun == grabbable):
 					# add the grabbable item to the player's
