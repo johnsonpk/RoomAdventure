@@ -6,6 +6,11 @@
 ######################################################################
 #import the time library
 import time
+
+def About():
+	return "This is a text based game made by Abhishek Shah, Pablo Johnson, and Matthew Louque. \nThis game's base engine was designed by Dr. Jean Gourd (www.jeangourd.com), and modified to what it is now by us. \nWe hope you enjoy the game! \nDoot Doot!"
+
+
 #blueprint for a room
 #the room class
 class Room(object):
@@ -223,9 +228,9 @@ def createRooms():
 	
 	
 	upstairs_BallRoom.addExit("down", great_hall)
-	upstairs_BallRoom.addItem("DanceFloor", "The Dancefloor is empty. You can tell many nobles have danced on this floor.")
-	upstairs_BallRoom.addItem("DiscoBall", "You can see the dust that has built up on it. This thing hasn't been used since the '80s")
-	upstairs_BallRoom.addItem("DjBooth", "You see DJ Khaled's logo on the booth. The booth is covered in piles of \"jewelry\" and other valueables.\n One of these valuables is a golden key.")
+	upstairs_BallRoom.addItem("Dance Floor", "The Dancefloor is empty. You can tell many nobles have danced on this floor.")
+	upstairs_BallRoom.addItem("Disco Ball", "You can see the dust that has built up on it. This thing hasn't been used since the '80s")
+	upstairs_BallRoom.addItem("Dj Booth", "You see DJ Khaled's logo on the booth. The booth is covered in piles of \"jewelry\" and other valuables")
 	
 	# TO DO --> ADD UPSTAIRS AND DOWNSTAIRS TREASURE CHESTS
 	
@@ -255,7 +260,7 @@ def createRooms():
 	laboratory.addItem("Telescope", "It is the same telescope that Gaileo used to disprove geocentrism")
 	laboratory.addItem("Chemical Cabinet", "It is unfortunately closed. No explosions...")
 	laboratory.addItem("Heavy Metal Operating Table", "An ear rests on the table.", "ear")
-	laboratory.addItem("Lab Skeleton","Doot doot.","red key")
+	laboratory.addItem("Lab Skeleton","Doot doot.", "A red key hangs around his neck", 1)
 	# Grabbables
 	laboratory.addGrabbable("Ear", "All the better to hEAR you with, my dear...")
 	laboratory.addGrabbable("Red Key","A blood-red key.")
@@ -331,9 +336,16 @@ while (True):
 	# exit, and bye)
 	if (action == "quit" or action == "exit" or action == "bye"):
 		break
-
+	
 	# set a default response
-	response = "I don't understand. Try verb noun. Valid verbs are go, look, and take"
+	response = "I don't understand. Try verb noun. Valid verbs are go, look, use, and take"
+	
+	# Help 
+	if (action == "help"):
+		response = "Try verb noun. Valid verbs are go, look, use, and take"
+	elif (action == "about"):
+		print About()
+		response = ""
 	# split the user input into words (words are separated by spaces)
 	# and store the words in a list
 	words = action.split()
@@ -440,10 +452,15 @@ while (True):
 				
 		# the verb is: doot
 		elif (verb == "doot"):
-																																																																	response = "Mr. Skeltal won't give you any calcium if you keep this up..."
-																																																																	if (noun == "doot"):
-																																																																		response = " Thank Mr. Skeltal" + "\n" + "     _.--^^--._        " + "\n" + "   .^          ^.     " + "\n" + "  | .   `      ` |    " + "\n" + "  \(            )/   " + "\n" + "   \)__.    _._(/  " + "\n" + "   //   >..<   \\  " + "\n" + "   |__.` vv `.__/ " + "\n" + "      l```^``l    " + "\n" + "      \_    _/  " + "\n" + " _      )--(     _  " + "\n" + "| `--.__)--(_.--` |  " + "\n" + " \ |`----``----`| / " + "\n" + "  ||  `-`  `--` || " + "\n" + "  || `--`  `--` || " + "\n" + "  |l `--`--`--` |l  " + "\n" + " |__|`--`  `--`|__| " + "\n" + " |  |    )-(   |  | " + "\n" + "  ||     )-(    \|| " + "\n" + "  || __  )_(  __ \\  " + "\n" + "  ||`  `-   -`  \ \\ " + "\n" + "  ||\_   `-`   _/ |_\ " + "\n" + " /_\ _)J-._.-L(   /`-\ " + "\n" + "|`- I_)O /\ O( `--l\\\| " + "\n" + "||||( `-`  `-`) .-` ||| " + "\n" + " \\\ \       / /   /// " + "\n" + "    \ \     / / " + "\n" + "     \ \   / / " + "\n" + "     /  \ /  \ " + "\n" + "     |_()I()._| " + "\n" + "     \   /\   / " + "\n" + "      | /  \ | " + "\n" + "      | |   \ \ " + "\n" + "      | |    \ \ " + "\n" + "      | |     \ \ " + "\n" + "      | |doot  \ \_ " + "\n" + "      | |      /-._\ " + "\n" + "     |.-.\    //.-._) " + "\n" + "      \\\\   /// " + "\n" + "       \\\\-``` "
-																							
+			response = "Mr. Skeltal won't give you any calcium if you keep this up..."
+			if not("calcium" in inventory):
+				inventory.append("calcium")
+				inventoryDescriptions.append("You hear a trumpet play in the distance...")
+				response = ""
+			if (noun == "doot"):
+				response = " Thank Mr. Skeltal" + "\n" + "     _.--^^--._        " + "\n" + "   .^          ^.     " + "\n" + "  | .   `      ` |    " + "\n" + "  \(            )/   " + "\n" + "   \)__.    _._(/  " + "\n" + "   //   >..<   \\  " + "\n" + "   |__.` vv `.__/ " + "\n" + "      l```^``l    " + "\n" + "      \_    _/  " + "\n" + " _      )--(     _  " + "\n" + "| `--.__)--(_.--` |  " + "\n" + " \ |`----``----`| / " + "\n" + "  ||  `-`  `--` || " + "\n" + "  || `--`  `--` || " + "\n" + "  |l `--`--`--` |l  " + "\n" + " |__|`--`  `--`|__| " + "\n" + " |  |    )-(   |  | " + "\n" + "  ||     )-(    \|| " + "\n" + "  || __  )_(  __ \\  " + "\n" + "  ||`  `-   -`  \ \\ " + "\n" + "  ||\_   `-`   _/ |_\ " + "\n" + " /_\ _)J-._.-L(   /`-\ " + "\n" + "|`- I_)O /\ O( `--l\\\| " + "\n" + "||||( `-`  `-`) .-` ||| " + "\n" + " \\\ \       / /   /// " + "\n" + "    \ \     / / " + "\n" + "     \ \   / / " + "\n" + "     /  \ /  \ " + "\n" + "     |_()I()._| " + "\n" + "     \   /\   / " + "\n" + "      | /  \ | " + "\n" + "      | |   \ \ " + "\n" + "      | |    \ \ " + "\n" + "      | |     \ \ " + "\n" + "      | |doot  \ \_ " + "\n" + "      | |      /-._\ " + "\n" + "     |.-.\    //.-._) " + "\n" + "      \\\\   /// " + "\n" + "       \\\\-``` "
+
+
 	#display the response 
 	print "\n{}".format(response)
 
